@@ -1,0 +1,80 @@
+.root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  column-gap: 55px;
+  row-gap: 55px;
+  grid-template-columns: repeat(auto-fill, 200px);
+  justify-content: center;
+}
+
+.note {
+  --borderColor: #333333;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 200px;
+  height: 270px;
+  border: 2px solid var(--borderColor);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noteTopBorder::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 40px 40px 0 0;
+  border-color: var(--borderColor) transparent transparent transparent;
+  top: -7px;
+  left: -7px;
+}
+
+.noteTopBorder::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 40px 40px 0;
+  border-color: transparent var(--borderColor) transparent transparent;
+  top: -7px;
+  right: -7px;
+}
+
+.noteBottomBorder::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 40px 0 0 40px;
+  border-color: transparent transparent transparent var(--borderColor);
+  bottom: -7px;
+  left: -7px;
+}
+
+.noteBottomBorder::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 40px 40px;
+  border-color: transparent transparent var(--borderColor) transparent;
+  bottom: -7px;
+  right: -7px;
+}
+
+.videoBlock {
+  width: 150px;
+  height: 150px;
+  background: tomato;
+  margin-bottom: 70px;
+  border-radius: 50%;
+}

@@ -1,0 +1,18 @@
+.root {
+  width: 100%;
+  display: grid;
+  grid-template-columns: min-content max-content;
+  margin-top: 45px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+}
+
+.mainSiteLink {
+  display: flex;
+  align-items: center;
+}
