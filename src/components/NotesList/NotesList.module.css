@@ -11,16 +11,22 @@
 
 .note {
   --borderColor: #333333;
+  --patchColor: #646cff;
   list-style: none;
   padding: 0;
   margin: 0;
   width: 200px;
   height: 270px;
-  border: 2px solid var(--borderColor);
+  border: 7px solid #ffffff;
+  box-shadow: inset 2px 2px 0 var(--borderColor), inset -2px -2px 0 var(--borderColor);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #ffffff;
+  transition: all 0.4s ease;
+  transform-origin: 0 0;
+  box-sizing: border-box;
 }
 
 .noteTopBorder::after {
@@ -30,7 +36,7 @@
   height: 0;
   border-style: solid;
   border-width: 40px 40px 0 0;
-  border-color: var(--borderColor) transparent transparent transparent;
+  border-color: var(--patchColor) transparent transparent transparent;
   top: -7px;
   left: -7px;
 }
@@ -42,7 +48,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 40px 40px 0;
-  border-color: transparent var(--borderColor) transparent transparent;
+  border-color: transparent var(--patchColor) transparent transparent;
   top: -7px;
   right: -7px;
 }
@@ -54,7 +60,7 @@
   height: 0;
   border-style: solid;
   border-width: 40px 0 0 40px;
-  border-color: transparent transparent transparent var(--borderColor);
+  border-color: transparent transparent transparent var(--patchColor);
   bottom: -7px;
   left: -7px;
 }
@@ -66,15 +72,31 @@
   height: 0;
   border-style: solid;
   border-width: 0 0 40px 40px;
-  border-color: transparent transparent var(--borderColor) transparent;
+  border-color: transparent transparent var(--patchColor) transparent;
   bottom: -7px;
   right: -7px;
 }
 
 .videoBlock {
-  width: 150px;
-  height: 150px;
+  width: 80%;
+  height: auto;
   background: tomato;
   margin-bottom: 70px;
   border-radius: 50%;
+  aspect-ratio: 1/1;
+}
+
+.timerProgress {
+  padding: 2px;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.videoElement {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }

@@ -3,11 +3,13 @@ import css from './App.module.css'
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import NotesList from './components/NotesList/NotesList';
+import NotesContext, { TNote } from './contexts/NotesContext';
 
 const RECORD_TIME_MILLISECONDS = 10000;
 const UPDATE_PERIOD_MILLISECONDS = 200;
 
 function App() {
+  const [notes, setNotes] = useState<TNote[]>([]);
   const [expanded, setExpanded] = useState<boolean>(false);
   const playerRef = useRef<HTMLVideoElement>(null);
   const player2Ref = useRef<HTMLVideoElement>(null);
@@ -18,7 +20,7 @@ function App() {
   const [recording, setRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState<number>(0);
 
-  useEffect(() => {
+  /*useEffect(() => {
     navigator.mediaDevices
     .getUserMedia({audio: true, video: true})
     .then((stream) => {
@@ -26,7 +28,7 @@ function App() {
       if (playerRef.current)
         playerRef.current.srcObject = streamRef.current;
     });
-  }, []);
+  }, []);*/
 
   const stopRecord = () => {
     recorderRef?.current?.stop();
@@ -80,20 +82,22 @@ function App() {
 
 
   useEffect(() => {
-    const swMessages = (event: ExtendableMessageEvent) => {
-      console.log('sw message: ', event.data);
-      if (player2Ref.current)
-        player2Ref.current.src = URL.createObjectURL(event.data);
+    const swMessages = ({data}: ExtendableMessageEvent) => {
+      if (data.type === 'LOAD_NOTES_SUCCESS') {
+        setNotes(data.result || [])
+      }
+      /*if (player2Ref.current)
+        player2Ref.current.src = URL.createObjectURL(event.data);*/
     };
 
-    navigator?.serviceWorker?.controller?.addEventListener('message', swMessages);
+    navigator?.serviceWorker?.addEventListener('message', swMessages);
 
     navigator?.serviceWorker?.controller?.postMessage({
       type: 'LOAD_NOTES'
     });
 
     return () => {
-      navigator?.serviceWorker?.controller?.removeEventListener('message', swMessages);
+      navigator?.serviceWorker?.removeEventListener('message', swMessages);
     };
   }, [])
 
@@ -112,22 +116,24 @@ function App() {
   const videoBlockStyles = `${css.videoBlock} ${expanded ? css.expanded : ''}`;
 
   return (
-    <main className={css.root}>
-      <Header onAddNote={showPreview} />
-      <article>
-        {/*<div className={videoBlockStyles} onClick={() => setExpanded(!expanded)}>
-          <div className={css.timerProgress} style={getTimerProgressStyle()}>
-            <video className={css.videoElement} ref={playerRef} muted autoPlay></video>
+    <NotesContext.Provider value={notes} >
+      <main className={css.root}>
+        <Header onAddNote={showPreview} />
+        <article>
+          {/*<div className={videoBlockStyles} onClick={() => setExpanded(!expanded)}>
+            <div className={css.timerProgress} style={getTimerProgressStyle()}>
+              <video className={css.videoElement} ref={playerRef} muted autoPlay></video>
+            </div>
+            
           </div>
-          
-        </div>
-        <button onClick={startRecord} >{recording ? 'stop record' : 'record'}</button> */}
+          <button onClick={startRecord} >{recording ? 'stop record' : 'record'}</button> */}
 
 
-        <NotesList />
-      </article>
-      <Footer />
-    </main>
+          <NotesList />
+        </article>
+        <Footer />
+      </main>
+    </NotesContext.Provider>
   )
 }
 

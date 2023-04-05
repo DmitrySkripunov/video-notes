@@ -88,21 +88,20 @@ async function addToStore(key, value) {
 }
 
 addEventListener('message', async ({data, source}) => {
+  const client = await self.clients.get(source.id);
   if (data.type === 'LOAD_NOTES') {
     try {
-      console.log('LOAD_NOTES');
       const result = await getFromStore(data.key);
-      console.log('LOAD_NOTES RESULT:', result);
-      source.postMessage({type: 'LOAD_NOTES_SUCCESS', result});
+      client.postMessage({type: 'LOAD_NOTES_SUCCESS', result});
     } catch (e) {
-      source.postMessage({type: 'LOAD_NOTES_ERROR', error: e});
+      client.postMessage({type: 'LOAD_NOTES_ERROR', error: e});
     }
   } else if (data.type === 'ADD_NOTE') {
     try {
       const key = await addToStore(data.key, data.blob);
-      source.postMessage({type: 'ADD_NOTE_SUCCESS', key});
+      client.postMessage({type: 'ADD_NOTE_SUCCESS', key});
     } catch (e) {
-      source.postMessage({type: 'ADD_NOTE_ERROR', error: e});
+      client.postMessage({type: 'ADD_NOTE_ERROR', error: e});
     }
   } else {
     //console.log(`The client sent me a message: ${event.data}`);
