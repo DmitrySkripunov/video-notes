@@ -87,6 +87,31 @@ async function addToStore(key, value) {
   });
 }
 
+async function removeFromStore(key) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, "readwrite");
+    const store = transaction.objectStore(storeName);
+
+    const request = store.delete(key);
+
+    request.onsuccess = function () {
+      resolve(request.result);
+    };
+
+    request.onerror = function () {
+      reject(request.error);
+    };
+
+    transaction.onerror = function (event) {
+      reject(event);
+    };
+
+    transaction.oncomplete = function (event) {
+      //console.log("trans completed", event);
+    };
+  });
+}
+
 addEventListener('message', async ({data, source}) => {
   const client = await self.clients.get(source.id);
   if (data.type === 'LOAD_NOTES') {
@@ -98,10 +123,18 @@ addEventListener('message', async ({data, source}) => {
     }
   } else if (data.type === 'ADD_NOTE') {
     try {
-      const key = await addToStore(data.key, data.blob);
-      client.postMessage({type: 'ADD_NOTE_SUCCESS', key});
+      const timestamp = Date.now();
+      const key = await addToStore(data.key, {blob: data.blob, timestamp});
+      client.postMessage({type: 'ADD_NOTE_SUCCESS', result: {key, value: {blob: data.blob, timestamp}}});
     } catch (e) {
       client.postMessage({type: 'ADD_NOTE_ERROR', error: e});
+    }
+  } else if (data.type === 'REMOVE_NOTE') {
+    try {
+      await removeFromStore(data.key);
+      client.postMessage({type: 'REMOVE_NOTE_SUCCESS', key: data.key});
+    } catch (e) {
+      client.postMessage({type: 'REMOVE_NOTE_ERROR', error: e});
     }
   } else {
     //console.log(`The client sent me a message: ${event.data}`);

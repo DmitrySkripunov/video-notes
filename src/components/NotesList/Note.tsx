@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import css from './NotesList.module.css'
 import ProgressVideo from './ProgressVideo';
+import { TNoteValue } from '../../contexts/NotesContext';
 
 type NoteProps = {
-  video: Blob
+  note: TNoteValue,
+  onRemove: () => void
 }
 
-const Note = ({video}: NoteProps) => {
+const Note = ({note, onRemove}: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null)
   const [expanded, setExpanded] = useState(false);
 
@@ -40,13 +42,31 @@ const Note = ({video}: NoteProps) => {
     }
   }
 
+  const remove = (evt: MouseEvent) => {
+    evt.stopPropagation();
+    
+    onRemove();
+  }
+
   return (
     <li className={css.note} ref={noteRef} onClick={() => setExpanded(!expanded)} style={rootStyles()}>
       <div className={css.noteTopBorder} />
       <div className={css.noteBottomBorder} />
 
       <div className={css.videoBlock} style={videoBlockStyles()}>
-        <ProgressVideo video={video}/>
+        <ProgressVideo video={note.blob}/>
+      </div>
+
+      <div className={css.controls}>
+        <span style={{fontSize: '12px'}}>
+          {new Intl.DateTimeFormat('en-GB', { 
+            month: 'long', 
+            day: 'numeric', 
+            hour: 'numeric', 
+            minute:'numeric' 
+            }).format(new Date(note.timestamp))}
+          </span>
+          <button style={{fontSize: '12px'}} onClick={remove}>Remove</button>
       </div>
     </li>
   );

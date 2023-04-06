@@ -20,7 +20,7 @@ function App() {
   const [recording, setRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState<number>(0);
 
-  /*useEffect(() => {
+  useEffect(() => {
     navigator.mediaDevices
     .getUserMedia({audio: true, video: true})
     .then((stream) => {
@@ -28,7 +28,7 @@ function App() {
       if (playerRef.current)
         playerRef.current.srcObject = streamRef.current;
     });
-  }, []);*/
+  }, []);
 
   const stopRecord = () => {
     recorderRef?.current?.stop();
@@ -54,14 +54,15 @@ function App() {
       });
 
       recorderRef.current.addEventListener('stop', function() {
+        const blob = new Blob(recordedChunks);
+        navigator?.serviceWorker?.controller?.postMessage({
+          type: 'ADD_NOTE',
+          key: Date.now().toString(),
+          blob 
+        });
+
         if (player2Ref.current) {
-          const blob = new Blob(recordedChunks);
           player2Ref.current.src = URL.createObjectURL(blob);
-          navigator?.serviceWorker?.controller?.postMessage({
-            type: 'ADD_NOTE',
-            key: Date.now().toString(),
-            blob 
-          });
         }
         //downloadLink.href = );
         //downloadLink.download = 'acetest.webm';
@@ -84,10 +85,13 @@ function App() {
   useEffect(() => {
     const swMessages = ({data}: ExtendableMessageEvent) => {
       if (data.type === 'LOAD_NOTES_SUCCESS') {
-        setNotes(data.result || [])
+        setNotes(data.result || []);
+      } else if (data.type === 'ADD_NOTE_SUCCESS') {
+        setNotes(notes => notes.concat(data.result));
+      } else if (data.type === 'REMOVE_NOTE_SUCCESS') {
+        setNotes(notes => notes.filter(note => note.key !== data.key));
       }
-      /*if (player2Ref.current)
-        player2Ref.current.src = URL.createObjectURL(event.data);*/
+      //TODO: errors handlers
     };
 
     navigator?.serviceWorker?.addEventListener('message', swMessages);
@@ -115,21 +119,30 @@ function App() {
 
   const videoBlockStyles = `${css.videoBlock} ${expanded ? css.expanded : ''}`;
 
+  const onRemoveNote = (key: string) => {
+    if (confirm('Are you sure?')) {
+      navigator?.serviceWorker?.controller?.postMessage({
+        type: 'REMOVE_NOTE',
+        key
+      });
+    }
+  }
+
   return (
     <NotesContext.Provider value={notes} >
       <main className={css.root}>
         <Header onAddNote={showPreview} />
         <article>
-          {/*<div className={videoBlockStyles} onClick={() => setExpanded(!expanded)}>
+          <div className={videoBlockStyles} onClick={() => setExpanded(!expanded)}>
             <div className={css.timerProgress} style={getTimerProgressStyle()}>
               <video className={css.videoElement} ref={playerRef} muted autoPlay></video>
             </div>
             
           </div>
-          <button onClick={startRecord} >{recording ? 'stop record' : 'record'}</button> */}
+          <button onClick={startRecord} >{recording ? 'stop record' : 'record'}</button> 
 
 
-          <NotesList />
+          <NotesList onRemoveNote={onRemoveNote} />
         </article>
         <Footer />
       </main>
