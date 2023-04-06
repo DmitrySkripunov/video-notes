@@ -1,3 +1,57 @@
 .root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 999999;
+  background: #ffffff;
+  box-sizing: border-box;
+  border: 3px solid tomato;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.hint {
+  margin-top: 15px;
+}
+
+.videoBlock {
+  width: 80%;
+  height: auto;
+  background: tomato;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  margin-top: 35px;
+}
+
+@media (orientation: landscape) {
+  .videoBlock {
+    height: 80%;
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+.timerProgress {
+  padding: 2px;
   width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-sizing: border-box;
+  background: conic-gradient(#646cff 0deg, white 0deg);
+}
+
+.videoElement {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.closeButton {
+  position: absolute;
+  right: 25px;
 }

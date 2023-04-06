@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from 'react'
 import vnotesLogo from '/vnotes.svg'
 import css from './Header.module.css'
 
