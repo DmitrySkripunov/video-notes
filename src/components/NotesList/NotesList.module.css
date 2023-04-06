@@ -27,6 +27,7 @@
   transition: all 0.4s ease;
   transform-origin: 0 0;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .noteTopBorder::after {
@@ -92,6 +93,7 @@
   height: 100%;
   border-radius: 50%;
   box-sizing: border-box;
+  background: conic-gradient(#646cff 0deg, white 0deg);
 }
 
 .videoElement {

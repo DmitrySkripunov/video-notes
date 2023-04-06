@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import css from './NotesList.module.css'
-import Video from './Video';
+import ProgressVideo from './ProgressVideo';
 
 type NoteProps = {
   video: Blob
@@ -9,14 +9,6 @@ type NoteProps = {
 const Note = ({video}: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null)
   const [expanded, setExpanded] = useState(false);
-
-  const getTimerProgressStyle = () => {
-    const angle = 45; //(360 * recordingTime) / RECORD_TIME_MILLISECONDS;
-
-    return {
-      'background': `conic-gradient(#646cff ${angle}deg, white 0deg)`
-    };
-  };
 
   useEffect(() => {
     if (expanded) {
@@ -54,9 +46,7 @@ const Note = ({video}: NoteProps) => {
       <div className={css.noteBottomBorder} />
 
       <div className={css.videoBlock} style={videoBlockStyles()}>
-        <div className={css.timerProgress} style={getTimerProgressStyle()}>
-          <Video video={video} onClick={videoClick} />
-        </div>
+        <ProgressVideo video={video}/>
       </div>
     </li>
   );
