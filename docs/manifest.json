@@ -22,7 +22,7 @@
     }
   ],
   "id": "/?homescreen",
-  "start_url": "/",
+  "start_url": "/video-notes/",
   "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
