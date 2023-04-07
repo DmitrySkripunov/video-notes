@@ -24,7 +24,8 @@
   "id": "/?homescreen",
   "start_url": "/",
   "background_color": "#ffffff",
-  "display": "fullscreen",
+  "display": "standalone",
+  "orientation": "portrait",
   "scope": "/",
   "theme_color": "#f8f4e3"
 }
