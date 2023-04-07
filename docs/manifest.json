@@ -24,7 +24,8 @@
   "id": "/?homescreen",
   "start_url": "/video-notes/",
   "background_color": "#ffffff",
-  "display": "fullscreen",
+  "display": "standalone",
+  "orientation": "portrait",
   "scope": "/video-notes/",
   "theme_color": "#f8f4e3"
 }
