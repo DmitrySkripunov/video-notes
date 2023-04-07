@@ -35,14 +35,14 @@ const Note = ({note, onRemove}: NoteProps) => {
 
   const videoBlockStyles = () => {
     const landscape = window.innerWidth > window.innerHeight;
-    const multiplier = landscape && expanded ? window.innerHeight : window.innerWidth;
+    const multiplier = landscape ? window.innerHeight : window.innerWidth;
     const size = `${multiplier * 0.8}px`;
 
 
-    return expanded ? {
+    return {
       'width': size,
       'height': size
-    } : {};
+    };
   }
 
   const remove = (evt: MouseEvent) => {
