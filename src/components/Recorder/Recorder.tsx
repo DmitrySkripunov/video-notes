@@ -113,10 +113,17 @@ const Recorder = ({isOpen, onClose, onSave}: TRecorderProps) => {
     onClose(evt);
   }
 
+  const videoBlockStyles = () => {
+    const isLandscape = window.innerWidth > window.innerHeight;
+    const s = `${(isLandscape ? window.innerHeight : window.innerWidth) * 0.8}px`;
+
+    return {width: s, height: s};
+  };
+
   return (
     <div className={css.root} style={{display: isOpen ? 'flex' : 'none'}} onClick={startRecord}>
       <button className={css.closeButton} onClick={close}>Close</button>
-      <div className={css.videoBlock}>
+      <div className={css.videoBlock} style={videoBlockStyles()}>
         <div className={css.timerProgress} ref={progressRef}>
           <video className={css.videoElement} ref={playerRef} muted autoPlay></video>
         </div>

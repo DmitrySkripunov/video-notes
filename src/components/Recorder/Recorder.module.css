@@ -19,18 +19,13 @@
 }
 
 .videoBlock {
-  width: 80%;
-  height: auto;
   background: tomato;
   border-radius: 50%;
-  aspect-ratio: 1/1;
   margin-top: 35px;
 }
 
 @media (orientation: landscape) {
   .videoBlock {
-    height: 80%;
-    width: auto;
     margin-top: 0;
   }
 }
