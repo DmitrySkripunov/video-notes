@@ -8,6 +8,7 @@ if ("serviceWorker" in navigator) {
     .register("/sw.js")
     .then(() =>
       navigator.serviceWorker.ready.then((worker) => {
+        // @ts-ignore
         worker.sync.register("syncdata");
       })
     )

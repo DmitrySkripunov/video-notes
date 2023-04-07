@@ -14,6 +14,7 @@ function App() {
   const [notes, setNotes] = useState<TNote[]>([]);
 
   useEffect(() => {
+    // @ts-ignore
     const swMessages = ({data}: ExtendableMessageEvent) => {
       if (data.type === 'LOAD_NOTES_SUCCESS') {
         setNotes(data.result || []);
