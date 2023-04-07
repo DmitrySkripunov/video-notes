@@ -51,6 +51,16 @@ function App() {
     setOpenRecorder(false);
   }
 
+  const saveNote = (blob: Blob) => {
+    navigator?.serviceWorker?.controller?.postMessage({
+      type: 'ADD_NOTE',
+      key: Date.now().toString(),
+      blob 
+    });
+
+    setOpenRecorder(false);
+  }
+
   const addNotes = () => {
     if (notes.length >= MAX_NUMBER_NOTES) {
       alert('At the moment, I do not recommend creating more than 5 notes.');
@@ -64,7 +74,7 @@ function App() {
       <main className={css.root}>
         <Header onAddNote={addNotes} />
         <article>
-          <Recorder isOpen={isRecorderOpen} onClose={closeRecorder} />
+          <Recorder isOpen={isRecorderOpen} onClose={closeRecorder} onSave={saveNote} />
           <NotesList onRemoveNote={onRemoveNote} />
         </article>
         <Footer />

@@ -6,10 +6,11 @@ const RECORD_TIME_SECONDS = RECORD_TIME_MILLISECONDS / 1000;
 
 export type TRecorderProps = {
   isOpen: boolean,
-  onClose: (evt: MouseEvent | null) => void
+  onClose: (evt: MouseEvent | null) => void,
+  onSave: (note: Blob) => void
 }
 
-const Recorder = ({isOpen, onClose}: TRecorderProps) => {
+const Recorder = ({isOpen, onClose, onSave}: TRecorderProps) => {
   const [isStreamReady, setIsStreamReady] = useState<boolean>(false);
   const playerRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -68,10 +69,13 @@ const Recorder = ({isOpen, onClose}: TRecorderProps) => {
 
   const stopRecord = () => {
     recorderRef?.current?.stop();
+   
+    if (progressRef.current)
+      progressRef.current.style.removeProperty('background');
+
     recorderRef.current = null;
     setRecording(false);
     setRecordingTime(0);
-    onClose(null);
   };
 
   const startRecord = () => {
@@ -94,12 +98,8 @@ const Recorder = ({isOpen, onClose}: TRecorderProps) => {
 
       recorderRef.current.addEventListener('stop', function() {
         const blob = new Blob(recordedChunks);
-        navigator?.serviceWorker?.controller?.postMessage({
-          type: 'ADD_NOTE',
-          key: Date.now().toString(),
-          blob 
-        });
-        //TODO: callback
+        if (isOpen)
+          onSave(blob);
       });
 
       recorderRef.current.start();
@@ -108,9 +108,14 @@ const Recorder = ({isOpen, onClose}: TRecorderProps) => {
     }
   }
 
+  const close = (evt: MouseEvent) => {
+    stopRecord();
+    onClose(evt);
+  }
+
   return (
     <div className={css.root} style={{display: isOpen ? 'flex' : 'none'}} onClick={startRecord}>
-      <button className={css.closeButton} onClick={onClose}>Close</button>
+      <button className={css.closeButton} onClick={close}>Close</button>
       <div className={css.videoBlock}>
         <div className={css.timerProgress} ref={progressRef}>
           <video className={css.videoElement} ref={playerRef} muted autoPlay></video>
