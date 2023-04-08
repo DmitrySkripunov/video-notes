@@ -40,8 +40,8 @@ const Note = ({note, onRemove}: NoteProps) => {
 
 
     return {
-      'width': size,
-      'height': size
+      'width': expanded ? size : '150px',
+      'height': expanded? size : '150px'
     };
   }
 
